@@ -1,0 +1,17 @@
+{
+    "name": "arianbahreman/conditional-router",
+    "description": "Wordpress conditional router",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Arianbahreman\\ConditionalRouter\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Arian Bahreman",
+            "email": "arian.bahreman@gmail.com"
+        }
+    ],
+    "require": {}
+}
