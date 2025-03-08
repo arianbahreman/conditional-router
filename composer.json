@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=8.0",
+    "php": ">=7.4",
     "laminas/laminas-diactoros": "^2.0",
     "psr/http-message": "^1.0"
   },
@@ -25,6 +25,6 @@
   "scripts": {
     "test": "phpunit --bootstrap vendor/autoload.php tests/"
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "prefer-stable": true
 }
