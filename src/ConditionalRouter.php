@@ -1,133 +1,148 @@
-<?php namespace Models;
+<?php
 
+use Exception;
+use InvalidArgumentException;
 use Laminas\Diactoros\Response\EmptyResponse;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ConditionalRouter {
-  private $response = null;
-  private $matched  = false;
-  private $middlewares = [];
-  private $validations = [];
+  private bool $matched = false;
+  private ServerRequestInterface $request;
+  private ?ResponseInterface $response = null;
 
-  private function execute($controller) {
-    if ($this -> matched) {
+  public function __construct(ServerRequestInterface $request) {
+    $this->request = $request;
+  }
+
+  private function execute($controller): void {
+    if ($this->matched) {
       return;
     }
 
-    list($class, $method) = explode('@', $controller);
+    if (is_callable($controller)) {
+      $response = $controller($this->request);
+    } elseif (is_string($controller)) {
+      $parts = explode('@', $controller);
 
-    if (class_exists($class) && method_exists($class, $method)) {
-      $instance = new $class();
-      $this -> matched  = true;
-      $this -> response = call_user_func([$instance, $method]);
+      if (count($parts) === 2) {
+        list($class, $method) = $parts;
+
+        if (class_exists($class) && method_exists($class, $method)) {
+          $instance = new $class();
+          $response = call_user_func([$instance, $method], $this->request);
+          
+        } else {
+          throw new Exception("Controller or method not found: {$controller}");
+        }
+      } else {
+        throw new InvalidArgumentException("Invalid controller format.");
+      }
     } else {
-      throw new \Exception("Controller or method not found: {$controller}");
-    }
-  }
-
-  function getResponse() {
-    if ($this -> response === null) {
-      return new EmptyResponse(404);
+      throw new InvalidArgumentException("Invalid controller type.");
     }
 
-    return $this -> response;
+    $this->matched = true;
+    $this->response = $response instanceof ResponseInterface ? $response : new EmptyResponse(500);
   }
 
-  /**
-   * Conditions
-   */
-  function home($controller) {
+  public function getResponse(): ResponseInterface {
+    return $this->response ?? new EmptyResponse(404);
+  }
+
+  public function home($controller): void {
     if (is_home()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function front_page($controller) {
+  public function frontPage($controller): void {
     if (is_front_page()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function singular($controller, $post_type = null) {
+  public function singular($controller, ?string $post_type = null): void {
     if (is_singular($post_type)) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function single($controller, $post = null) {
+  public function single($controller, ?string $post = null): void {
     if (is_single($post)) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function page($controller, $page = null) {
+  public function page($controller, ?string $page = null): void {
     if (is_page($page)) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function archive($controller) {
+  public function archive($controller): void {
     if (is_archive()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function category($controller, $category = null) {
+  public function category($controller, ?string $category = null): void {
     if (is_category($category)) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function tag($controller, $tag = null) {
+  public function tag($controller, ?string $tag = null): void {
     if (is_tag($tag)) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function tax($controller, $taxonomy = '', $term = '') {
+  public function tax($controller, string $taxonomy = '', string $term = ''): void {
     if (is_tax($taxonomy, $term)) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function author($controller, $author = null, $role = null) {
+  public function author($controller, ?string $author = null): void {
     if (is_author($author)) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function search($controller) {
+  public function search($controller): void {
     if (is_search()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function notfound($controller) {
+  public function notFound($controller): void {
     if (is_404()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function paged($controller) {
+  public function paged($controller): void {
     if (is_paged()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function feed($controller) {
+  public function feed($controller): void {
     if (is_feed()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function preview($controller) {
+  public function preview($controller): void {
     if (is_preview()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 
-  function admin($controller) {
+  public function admin($controller): void {
     if (is_admin()) {
-      $this -> execute($controller);
+      $this->execute($controller);
     }
   }
 }
