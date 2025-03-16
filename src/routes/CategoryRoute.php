@@ -1,6 +1,7 @@
 <?php namespace ConditionalRouter\Routes;
 
 use ConditionalRouter\ConditionalRoute;
+use Psr\Http\Message\ServerRequestInterface;
 
 class CategoryRoute extends ConditionalRoute {
   private $category;
@@ -9,7 +10,7 @@ class CategoryRoute extends ConditionalRoute {
     $this->category = $category;
   }
 
-  private function matches() {
+  public function matches(ServerRequestInterface $request): bool {
     return is_category($category);
   }
 }

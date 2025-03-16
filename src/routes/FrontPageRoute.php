@@ -1,9 +1,10 @@
 <?php namespace ConditionalRouter\Routes;
 
 use ConditionalRouter\ConditionalRoute;
+use Psr\Http\Message\ServerRequestInterface;
 
 class FrontPageRoute extends ConditionalRoute {
-  private function matches() {
-    return is_frontpage();
+  public function matches(ServerRequestInterface $request): bool {
+    return is_front_page();
   }
 }

@@ -16,5 +16,5 @@ abstract class ConditionalRoute {
    * 
    * @return bool True if the condition matches, false otherwise.
    */
-  abstract function matches(ServerRequestInterface $request): bool;
+  abstract public function matches(ServerRequestInterface $request): bool;
 }

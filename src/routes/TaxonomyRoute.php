@@ -1,6 +1,7 @@
 <?php namespace ConditionalRouter\Routes;
 
 use ConditionalRouter\ConditionalRoute;
+use Psr\Http\Message\ServerRequestInterface;
 
 class TaxonomyRoute extends ConditionalRoute {
   private $taxonomy;

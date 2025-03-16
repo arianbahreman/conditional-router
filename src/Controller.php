@@ -24,7 +24,7 @@ class Controller {
    * @return ResponseInterface The response from the controller action.
    * @throws InvalidArgumentException If the controller type is invalid.
    */
-  public function execute(ServerRequestInterface $request): ResponseInterface {
+  public function execute(ServerRequestInterface $request): mixed {
     if (is_callable($this->controller)) {
       return $this->controller($request);
     }
@@ -44,7 +44,7 @@ class Controller {
    * @throws InvalidArgumentException If the controller format is invalid.
    * @throws Exception If the class or method does not exist.
    */
-  private function invoke(ServerRequestInterface $request): ResponseInterface {
+  private function invoke(ServerRequestInterface $request): mixed {
     $parts = explode('@', $this->controller);
 
     if (count($parts) !== 2) {
