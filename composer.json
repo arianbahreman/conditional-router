@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "ConditionalRouter": "src/"
+      "ConditionalRouter\\": "src/"
     }
   }
 }
