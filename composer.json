@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "1.1.0",
   "name": "arianbahreman/conditional-router",
   "description": "A lightweight PSR-7 conditional router for WordPress, supporting both class methods and callable functions.",
   "type": "library",
@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "ConditionalRouter\\": "src/"
+      "ConditionalRouter": "src/"
     }
   }
 }
