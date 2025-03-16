@@ -1,6 +1,7 @@
 <?php namespace ConditionalRouter\Routes;
 
 use ConditionalRouter\ConditionalRoute;
+use Psr\Http\Message\ServerRequestInterface;
 
 class SingleRoute extends ConditionalRoute {
   private mixed $post;
